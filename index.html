@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<!--
+Author:Mahdy Hasan
+Email:mahdybd53@gmail.com
+Date:14-04-2017
+-->
+<html lang="en">
+<head>
+    <title>ajax-json</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width , initial-scale=1.0">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap.css">
+    <link rel="stylesheet" type="text/css" href="css/bootstrap-theme.min.css">
+    <link rel="stylesheet" type="text/css" href="css/style.css">
+    <link rel="stylesheet" type="text/css" href="css/jquery-ui.css">
+
+</head>
+<body>
+<!-- fb share  from:developers.fb.com-->
+  <div id="fb-root"></div>
+<script>(function(d, s, id) {
+  var js, fjs = d.getElementsByTagName(s)[0];
+  if (d.getElementById(id)) return;
+  js = d.createElement(s); js.id = id;
+  js.src = "//connect.facebook.net/en_US/sdk.js#xfbml=1&version=v2.8";
+  fjs.parentNode.insertBefore(js, fjs);
+}(document, 'script', 'facebook-jssdk'));</script> -->
+
+     <div class="container">
+     	<div class="row">
+     		<div class="col-xs-4 col-xs-offset-4 text-center">
+     			<h1>City Name</h1>
+     			<input type="text" class="form-control" id="c1" ><br>
+     			<button type="button" class="btn btn-danger" id="s1" >Submit</button><hr>
+
+     			<h2><span id="city"></span></h2>
+     			<h1><span id="country"></span></h2>
+     			<h3><span id="temp"></span></h2>
+     			<h4><span id="update"></span></h2><br>
+                
+                <div class="fb-share-button" data-href="https://developers.facebook.com/docs/plugins/" data-layout="box_count" data-size="large" data-mobile-iframe="true"><a class="fb-xfbml-parse-ignore" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fdevelopers.facebook.com%2Fdocs%2Fplugins%2F&amp;src=sdkpreparse">Facebook Share</a></div><br>
+               <!--tweet button from https://dev.twitter.com-->
+               <a class="twitter-share-button" id="t1">
+               Tweet</a>
+
+     		</div>
+     	</div>
+     </div>
+
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.js"></script>
+
+    <script>
+   
+    	$(function(){
+    		$value= "";
+    		$counter= 0;
+    		$("#s1").click(function(){
+              $("#c1").text("");
+              $value = $("#c1").val();
+              weather_json();
+              $counter= 0;
+    		})
+    		function weather_json(){
+    			$.ajax({
+    				//from https://www.apixu.com/my/#
+    				url:"http://api.apixu.com/v1/current.json?key=77f1539fbf55430ab5b92424171804&q=" + $value, data:"json",
+    			})
+
+    			.done(function (data){
+    				$("#city").html("<b>City:<b/>"+data.location.name);
+    				$("#country").html("<b>Country:</b>" +data.location.country);
+    				$("#temp").html("<b>Temperature:</b>"+data.current.temp_c +"°C");
+    				$("#update").html("<b>Last Updated:</b>" +data.current.last_updated);
+
+                  	var tweet= "City:"+ data.location.name +"  Country:"+ data.location.country +"  Temperature: " +data.current.temp_c +"°C";
+    				$("#t1").attr("href","https://twitter.com/intent/tweet?text=" +tweet);
+    			})
+    			.fail(function(){
+                   $("#city").html("City name not founded");
+                   $("#city").css("color","red");
+
+    			})
+    		}
+    	})
+
+    </script>
+       
+</body>      
+</html>
